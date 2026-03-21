@@ -1,0 +1,193 @@
+const navToggle = document.querySelector(".nav-toggle");
+const siteNav = document.querySelector(".site-nav");
+const modal = document.querySelector("[data-modal]");
+const modalTitle = document.getElementById("modal-title");
+const toast = document.querySelector("[data-toast]");
+const counters = document.querySelectorAll(".counter");
+const heroSlides = document.querySelectorAll(".hero-slide");
+const heroDots = document.querySelectorAll(".hero-dot");
+const youtubeIframes = document.querySelectorAll("iframe[data-youtube-id]");
+const modalViews = document.querySelectorAll("[data-modal-view]");
+const legalHashes = new Set(["privacy-policy", "terms-conditions"]);
+
+if (navToggle && siteNav) {
+  navToggle.addEventListener("click", () => {
+    const expanded = navToggle.getAttribute("aria-expanded") === "true";
+    navToggle.setAttribute("aria-expanded", String(!expanded));
+    siteNav.classList.toggle("is-open", !expanded);
+  });
+
+  siteNav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      navToggle.setAttribute("aria-expanded", "false");
+      siteNav.classList.remove("is-open");
+    });
+  });
+}
+
+const showToast = () => {
+  if (!toast) return;
+  toast.hidden = false;
+  window.clearTimeout(showToast.timeoutId);
+  showToast.timeoutId = window.setTimeout(() => {
+    toast.hidden = true;
+  }, 2600);
+};
+
+const setModalView = (viewName) => {
+  if (!modalViews.length) return;
+
+  modalViews.forEach((view) => {
+    view.hidden = view.dataset.modalView !== viewName;
+  });
+
+  if (modalTitle && viewName === "lead") {
+    modalTitle.textContent = "Schedule Site Visit";
+  }
+};
+
+const clearLegalHash = () => {
+  if (!legalHashes.has(window.location.hash.replace("#", ""))) return;
+  history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+};
+
+const openModal = (viewName = "lead", updateHash = false) => {
+  if (!modal) return;
+  setModalView(viewName);
+  modal.hidden = false;
+  document.body.classList.add("modal-open");
+
+  if (viewName === "lead" && !updateHash) {
+    clearLegalHash();
+  }
+
+  if (updateHash && legalHashes.has(viewName) && window.location.hash !== `#${viewName}`) {
+    window.location.hash = viewName;
+  }
+};
+
+const closeModal = () => {
+  if (!modal) return;
+  modal.hidden = true;
+  document.body.classList.remove("modal-open");
+  clearLegalHash();
+};
+
+document.querySelectorAll("[data-open-modal]").forEach((button) => {
+  button.addEventListener("click", () => openModal("lead"));
+});
+
+document.querySelectorAll("[data-close-modal]").forEach((button) => {
+  button.addEventListener("click", closeModal);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeModal();
+  }
+});
+
+const syncModalWithHash = () => {
+  const hash = window.location.hash.replace("#", "");
+  if (!legalHashes.has(hash)) return;
+  openModal(hash);
+};
+
+window.addEventListener("hashchange", syncModalWithHash);
+syncModalWithHash();
+
+document.querySelectorAll("[data-demo-form]").forEach((form) => {
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    form.reset();
+    closeModal();
+    showToast();
+  });
+});
+
+youtubeIframes.forEach((iframe) => {
+  const videoId = iframe.dataset.youtubeId;
+  const start = iframe.dataset.youtubeStart || "0";
+  const isHttp = window.location.protocol === "http:" || window.location.protocol === "https:";
+
+  if (!isHttp) {
+    const fallback = document.createElement("a");
+    fallback.className = "video-fallback";
+    fallback.href = `https://www.youtube.com/watch?v=${videoId}&t=${start}s`;
+    fallback.target = "_blank";
+    fallback.rel = "noreferrer";
+    fallback.textContent = "Open video on YouTube";
+    iframe.replaceWith(fallback);
+    return;
+  }
+
+  iframe.src = `https://www.youtube.com/embed/${videoId}?start=${start}&rel=0&playsinline=1&origin=${encodeURIComponent(window.location.origin)}`;
+});
+
+if (heroSlides.length) {
+  let activeSlide = 0;
+  let heroTimerId;
+
+  const showHeroSlide = (index) => {
+    activeSlide = index;
+    heroSlides.forEach((slide, slideIndex) => {
+      slide.classList.toggle("is-active", slideIndex === index);
+    });
+    heroDots.forEach((dot, dotIndex) => {
+      dot.classList.toggle("is-active", dotIndex === index);
+    });
+  };
+
+  const startHeroRotation = () => {
+    window.clearInterval(heroTimerId);
+    heroTimerId = window.setInterval(() => {
+      const nextIndex = (activeSlide + 1) % heroSlides.length;
+      showHeroSlide(nextIndex);
+    }, 4500);
+  };
+
+  heroDots.forEach((dot, index) => {
+    dot.addEventListener("click", () => {
+      showHeroSlide(index);
+      startHeroRotation();
+    });
+  });
+
+  showHeroSlide(0);
+  startHeroRotation();
+}
+
+const formatCounter = (value) => {
+  return Number.isInteger(value) ? value.toLocaleString() : value.toFixed(1);
+};
+
+const animateCounter = (element) => {
+  const target = Number(element.dataset.counter || "0");
+  const duration = 1600;
+  const start = performance.now();
+
+  const frame = (now) => {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = target * eased;
+    element.textContent = formatCounter(current);
+
+    if (progress < 1) {
+      window.requestAnimationFrame(frame);
+    } else {
+      element.textContent = Number.isInteger(target) ? target.toLocaleString() : target.toFixed(1);
+    }
+  };
+
+  window.requestAnimationFrame(frame);
+};
+
+const counterObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    animateCounter(entry.target);
+    observer.unobserve(entry.target);
+  });
+}, { threshold: 0.4 });
+
+counters.forEach((counter) => counterObserver.observe(counter));
