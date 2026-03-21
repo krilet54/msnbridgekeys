@@ -253,8 +253,9 @@
           <div class="section-heading">
             <h2>Amenities</h2>
           </div>
-          <p>Experience 1,80,000 sq. ft. of premium amenities including clubhouse, podium, and skypark - exclusively for 655 luxury residences.</p>
+          <p class="amenities-intro">Experience 1,80,000 sq. ft. of premium amenities including clubhouse, podium, and skypark, curated exclusively for 655 luxury residences.</p>
           <div class="video-shell">
+            <span class="amenities-play" aria-hidden="true"></span>
             <iframe
               data-youtube-id="OTv6_tpyk0M"
               data-youtube-start="4"
@@ -264,18 +265,36 @@
             ></iframe>
           </div>
         </div>
-        <div class="accordion-stack">
-          <details open>
-            <summary>Yacht Shaped Clubhouse</summary>
-            <p># Banquet with Kitchen, # Pilates Studio, # Sports Lounge, # Queen's Lounge and many more...</p>
+        <div class="accordion-stack amenities-stack">
+          <details open class="amenity-card">
+            <summary><span class="amenity-icon" aria-hidden="true">⌂</span><span class="amenity-title">Yacht Shaped Clubhouse</span></summary>
+            <div class="amenity-pills">
+              <span>Banquet with Kitchen</span>
+              <span>Pilates Studio</span>
+              <span>Sports Lounge</span>
+              <span>Queen's Lounge</span>
+              <span>And More</span>
+            </div>
           </details>
-          <details open>
-            <summary>Sky Park Amenities</summary>
-            <p># Sky Infinity Pool, # Sky Party Lounge, # Sky Walk, # Sky Cinema and many more...</p>
+          <details open class="amenity-card">
+            <summary><span class="amenity-icon" aria-hidden="true">◇</span><span class="amenity-title">Sky Park Amenities</span></summary>
+            <div class="amenity-pills">
+              <span>Sky Infinity Pool</span>
+              <span>Sky Party Lounge</span>
+              <span>Sky Walk</span>
+              <span>Sky Cinema</span>
+              <span>And More</span>
+            </div>
           </details>
-          <details open>
-            <summary>Podium Level Amenities</summary>
-            <p># Amphitheater, # Swimming Pool, # Art Gallery, # Golf Simulator and many more...</p>
+          <details open class="amenity-card">
+            <summary><span class="amenity-icon" aria-hidden="true">▣</span><span class="amenity-title">Podium Level Amenities</span></summary>
+            <div class="amenity-pills">
+              <span>Amphitheater</span>
+              <span>Swimming Pool</span>
+              <span>Art Gallery</span>
+              <span>Golf Simulator</span>
+              <span>And More</span>
+            </div>
           </details>
           <button class="button" type="button" data-open-modal>Explore Amenities</button>
         </div>
