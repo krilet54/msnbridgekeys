@@ -4,8 +4,6 @@ const modal = document.querySelector("[data-modal]");
 const modalTitle = document.getElementById("modal-title");
 const toast = document.querySelector("[data-toast]");
 const counters = document.querySelectorAll(".counter");
-const heroSlides = document.querySelectorAll(".hero-slide");
-const heroDots = document.querySelectorAll(".hero-dot");
 const youtubeIframes = document.querySelectorAll("iframe[data-youtube-id]");
 const modalViews = document.querySelectorAll("[data-modal-view]");
 const legalHashes = new Set(["privacy-policy", "terms-conditions"]);
@@ -180,39 +178,6 @@ youtubeIframes.forEach((iframe) => {
 
   iframe.src = `https://www.youtube.com/embed/${videoId}?start=${start}&rel=0&playsinline=1&origin=${encodeURIComponent(window.location.origin)}`;
 });
-
-if (heroSlides.length) {
-  let activeSlide = 0;
-  let heroTimerId;
-
-  const showHeroSlide = (index) => {
-    activeSlide = index;
-    heroSlides.forEach((slide, slideIndex) => {
-      slide.classList.toggle("is-active", slideIndex === index);
-    });
-    heroDots.forEach((dot, dotIndex) => {
-      dot.classList.toggle("is-active", dotIndex === index);
-    });
-  };
-
-  const startHeroRotation = () => {
-    window.clearInterval(heroTimerId);
-    heroTimerId = window.setInterval(() => {
-      const nextIndex = (activeSlide + 1) % heroSlides.length;
-      showHeroSlide(nextIndex);
-    }, 4500);
-  };
-
-  heroDots.forEach((dot, index) => {
-    dot.addEventListener("click", () => {
-      showHeroSlide(index);
-      startHeroRotation();
-    });
-  });
-
-  showHeroSlide(0);
-  startHeroRotation();
-}
 
 const formatCounter = (value, target) => {
   if (Number.isInteger(target)) {

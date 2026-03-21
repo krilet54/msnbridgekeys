@@ -180,19 +180,23 @@ input {
   position: relative;
   min-height: 100svh;
   overflow: hidden;
-  display: grid;
-  align-items: end;
-  isolation: isolate;
+  background: #000;
 }
 
 .hero::before {
-  content: "";
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 18%;
-  z-index: 1;
-  background: linear-gradient(180deg, rgba(83, 10, 29, 0.04), rgba(47, 4, 16, 0.72) 30%, rgba(9, 5, 4, 0.96));
-  pointer-events: none;
+  content: none;
+}
+
+.hero::after {
+  content: none;
+}
+
+.hero-banner {
+  display: block;
+  width: 100%;
+  height: 100svh;
+  object-fit: cover;
+  object-position: center;
 }
 
 .hero-slideshow,
@@ -233,19 +237,6 @@ input {
 .hero-slide-brand img {
   object-position: center 18%;
   filter: saturate(1.08) contrast(1.08);
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 28%;
-  z-index: 1;
-  background:
-    radial-gradient(circle at 22% 24%, rgba(110, 14, 39, 0.14), transparent 30%),
-    radial-gradient(circle at 76% 18%, rgba(165, 120, 67, 0.18), transparent 24%),
-    linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.38) 56%, rgba(0, 0, 0, 0.76));
-  pointer-events: none;
 }
 
 .hero-dot {
@@ -666,21 +657,88 @@ input {
 
 .enquiry-label {
   margin: 0;
-  max-width: 11ch;
+  max-width: 14ch;
   color: #2d1a1c;
   font-family: "Cormorant Garamond", serif;
-  font-size: clamp(2.2rem, 4.5vw, 4.2rem);
-  line-height: 0.94;
+  font-size: clamp(2.4rem, 4.8vw, 4.4rem);
+  line-height: 0.92;
   font-weight: 700;
   letter-spacing: 0.01em;
 }
 
 .enquiry-text {
-  max-width: 44ch;
-  margin: 18px 0 0;
+  max-width: 52ch;
+  margin: 22px 0 0;
   color: rgba(45, 26, 28, 0.78);
-  font-size: 1rem;
-  line-height: 1.9;
+  font-size: 1.02rem;
+  line-height: 1.95;
+}
+
+.enquiry-price {
+  display: grid;
+  gap: 6px;
+  width: fit-content;
+  margin-top: 30px;
+  padding: 0 0 0 18px;
+  border-left: 1px solid rgba(176, 141, 87, 0.45);
+}
+
+.enquiry-price-label {
+  color: rgba(45, 26, 28, 0.62);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.enquiry-price-value {
+  color: #7a1730;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+}
+
+.enquiry-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 760px;
+  margin-top: 34px;
+}
+
+.enquiry-stat {
+  min-height: 126px;
+  padding: 18px 18px 16px;
+  border: 1px solid rgba(176, 141, 87, 0.24);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.12)),
+    rgba(232, 216, 195, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 16px 36px rgba(72, 45, 22, 0.08);
+}
+
+.enquiry-stat strong {
+  display: block;
+  color: #2d1a1c;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  font-weight: 700;
+  line-height: 0.95;
+}
+
+.enquiry-stat span {
+  display: block;
+  margin-top: 12px;
+  color: rgba(45, 26, 28, 0.62);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.6;
+  text-transform: uppercase;
 }
 
 .enquiry-points,
@@ -2682,6 +2740,30 @@ body.modal-open {
   .enquiry-label {
     max-width: none;
     font-size: clamp(1.85rem, 9vw, 2.9rem);
+  }
+
+  .enquiry-text {
+    max-width: none;
+  }
+
+  .enquiry-price {
+    margin-top: 24px;
+    padding-left: 14px;
+  }
+
+  .enquiry-price-value {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
+  }
+
+  .enquiry-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  .enquiry-stat {
+    min-height: 0;
+    padding: 16px;
   }
 
   .lead-card-featured {
