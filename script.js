@@ -7,6 +7,11 @@ const counters = document.querySelectorAll(".counter");
 const youtubeIframes = document.querySelectorAll("iframe[data-youtube-id]");
 const modalViews = document.querySelectorAll("[data-modal-view]");
 const legalHashes = new Set(["privacy-policy", "terms-conditions"]);
+const locationMap = document.querySelector("[data-location-map]");
+const locationSummary = document.querySelector("[data-location-summary]");
+const locationTriggers = document.querySelectorAll("[data-location-trigger]");
+const locationResetButton = document.querySelector("[data-location-reset]");
+const projectLocation = "MSN ONE, Plot No 1, NEOPOLIS, Kokapet, Hyderabad, Telangana 500075";
 
 if (navToggle && siteNav) {
   navToggle.addEventListener("click", () => {
@@ -219,3 +224,74 @@ const counterObserver = new IntersectionObserver((entries, observer) => {
 }, { threshold: 0.4 });
 
 counters.forEach((counter) => counterObserver.observe(counter));
+
+if (locationMap && locationTriggers.length) {
+  const buildProjectOnlyMapUrl = () => {
+    const params = new URLSearchParams({
+      q: projectLocation,
+      t: "m",
+      z: "16",
+      output: "embed",
+      iwloc: "near"
+    });
+
+    return `https://maps.google.com/maps?${params.toString()}`;
+  };
+
+  const buildLocationMapUrl = (destination) => {
+    const params = new URLSearchParams({
+      output: "embed",
+      saddr: projectLocation,
+      daddr: destination,
+      z: "13"
+    });
+
+    return `https://maps.google.com/maps?${params.toString()}`;
+  };
+
+  const updateLocationMap = (trigger) => {
+    const destination = trigger.dataset.destination;
+    const label = trigger.dataset.label;
+    const distance = trigger.dataset.distance;
+
+    if (!destination || !label || !distance) return;
+
+    locationMap.src = buildLocationMapUrl(destination);
+    locationMap.title = `${projectLocation} to ${label}`;
+
+    if (locationSummary) {
+      locationSummary.innerHTML = `Showing route from <strong>MSN ONE, Neopolis</strong> to <strong>${label}</strong> at an approximate distance of <strong>${distance}</strong>.`;
+    }
+
+    locationTriggers.forEach((item) => {
+      item.classList.toggle("is-active", item === trigger);
+    });
+  };
+
+  const showProjectOnlyLocation = () => {
+    locationMap.src = buildProjectOnlyMapUrl();
+    locationMap.title = projectLocation;
+
+    if (locationSummary) {
+      locationSummary.innerHTML = `Showing the exact project location for <strong>MSN ONE, Neopolis</strong>.`;
+    }
+
+    locationTriggers.forEach((item) => {
+      item.classList.remove("is-active");
+    });
+  };
+
+  locationTriggers.forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      updateLocationMap(trigger);
+    });
+  });
+
+  if (locationResetButton) {
+    locationResetButton.addEventListener("click", showProjectOnlyLocation);
+  }
+
+  updateLocationMap(
+    document.querySelector("[data-location-trigger].is-active") || locationTriggers[0]
+  );
+}
