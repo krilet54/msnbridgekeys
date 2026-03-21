@@ -1256,7 +1256,6 @@ input {
 .feature-list li,
 .location-list li {
   position: relative;
-  padding-left: 28px;
   transition: transform 0.32s ease, color 0.32s ease;
 }
 
@@ -1270,13 +1269,91 @@ input {
 .location-list li::before {
   content: "";
   position: absolute;
-  top: 0.6em;
+  top: 50%;
   left: 0;
   width: 11px;
   height: 11px;
   border: 1px solid var(--accent-strong);
   border-radius: 50%;
   box-shadow: 0 0 0 4px rgba(165, 120, 67, 0.08);
+  transform: translateY(-50%);
+}
+
+.location-list li {
+  padding-left: 28px;
+}
+
+.location-reset-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 18px;
+  margin-top: 8px;
+  border: 1px solid rgba(208, 173, 117, 0.38);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #f3dfb8;
+  cursor: pointer;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: transform 0.32s ease, border-color 0.28s ease, background 0.28s ease, color 0.28s ease;
+}
+
+.location-reset-button:hover,
+.location-reset-button:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(239, 217, 171, 0.72);
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
+.location-link {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.32s ease;
+}
+
+.location-link span {
+  line-height: 1.6;
+}
+
+.location-link strong {
+  flex-shrink: 0;
+  color: rgba(243, 223, 184, 0.82);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.location-link.is-active {
+  color: #f3dfb8;
+}
+
+.location-link:focus-visible {
+  outline: 2px solid rgba(239, 217, 171, 0.7);
+  outline-offset: 6px;
+  border-radius: 8px;
+}
+
+.map-route-meta {
+  margin-top: 14px;
+  color: rgba(248, 244, 238, 0.74);
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.map-route-meta strong {
+  color: #f3dfb8;
 }
 
 .media-card {
@@ -1768,6 +1845,11 @@ input {
   overflow: hidden;
   border-radius: var(--radius);
   transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.map-shell {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 #amenities .video-shell {

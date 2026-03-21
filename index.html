@@ -302,25 +302,75 @@
             <h2>Location</h2>
           </div>
           <p>This thriving locality boasts excellent connectivity, vibrant markets, top-notch schools, and lush green spaces, making it a highly sought-after destination for modern families.</p>
+          <button class="location-reset-button" type="button" data-location-reset>Show Project Location Only</button>
           <ul class="location-list">
-            <li>ORR (Exit no 1A: Mallampet) - 4 Minutes</li>
-            <li>Gaudium School - 5.4Km</li>
-            <li>Oakridge International School - 9.1 km</li>
-            <li>Continental Hospitals - 4.9 Km</li>
-            <li>AIG Hospitals - 8.9Km</li>
-            <li>Inorbit Mall - 14.1 Km</li>
-            <li>GAR Infobahn - 2.9 Km</li>
-            <li>Durgam Cheruvu Metro Station - 12Km</li>
-            <li>Financial District - 5 km</li>
+            <li>
+              <button class="location-link is-active" type="button" data-location-trigger data-destination="ORR Exit No 1A Mallampet, Hyderabad" data-label="ORR (Exit no 1A: Mallampet)" data-distance="4 Minutes">
+                <span>ORR (Exit no 1A: Mallampet)</span>
+                <strong>4 Minutes</strong>
+              </button>
+            </li>
+            <li>
+              <button class="location-link" type="button" data-location-trigger data-destination="Gaudium School, Kollur, Hyderabad" data-label="Gaudium School" data-distance="5.4 Km">
+                <span>Gaudium School</span>
+                <strong>5.4 Km</strong>
+              </button>
+            </li>
+            <li>
+              <button class="location-link" type="button" data-location-trigger data-destination="Oakridge International School, Gachibowli, Hyderabad" data-label="Oakridge International School" data-distance="9.1 Km">
+                <span>Oakridge International School</span>
+                <strong>9.1 Km</strong>
+              </button>
+            </li>
+            <li>
+              <button class="location-link" type="button" data-location-trigger data-destination="Continental Hospitals, Gachibowli, Hyderabad" data-label="Continental Hospitals" data-distance="4.9 Km">
+                <span>Continental Hospitals</span>
+                <strong>4.9 Km</strong>
+              </button>
+            </li>
+            <li>
+              <button class="location-link" type="button" data-location-trigger data-destination="AIG Hospitals, Gachibowli, Hyderabad" data-label="AIG Hospitals" data-distance="8.9 Km">
+                <span>AIG Hospitals</span>
+                <strong>8.9 Km</strong>
+              </button>
+            </li>
+            <li>
+              <button class="location-link" type="button" data-location-trigger data-destination="Inorbit Mall, Hyderabad" data-label="Inorbit Mall" data-distance="14.1 Km">
+                <span>Inorbit Mall</span>
+                <strong>14.1 Km</strong>
+              </button>
+            </li>
+            <li>
+              <button class="location-link" type="button" data-location-trigger data-destination="GAR Infobahn, Kokapet, Hyderabad" data-label="GAR Infobahn" data-distance="2.9 Km">
+                <span>GAR Infobahn</span>
+                <strong>2.9 Km</strong>
+              </button>
+            </li>
+            <li>
+              <button class="location-link" type="button" data-location-trigger data-destination="Durgam Cheruvu Metro Station, Hyderabad" data-label="Durgam Cheruvu Metro Station" data-distance="12 Km">
+                <span>Durgam Cheruvu Metro Station</span>
+                <strong>12 Km</strong>
+              </button>
+            </li>
+            <li>
+              <button class="location-link" type="button" data-location-trigger data-destination="Financial District, Nanakramguda, Hyderabad" data-label="Financial District" data-distance="5 Km">
+                <span>Financial District</span>
+                <strong>5 Km</strong>
+              </button>
+            </li>
           </ul>
         </div>
         <div class="map-shell">
           <iframe
+            data-location-map
             src="https://maps.google.com/maps?q=MSN%20ONE%2C%20Plot%20No%201%2C%20NEOPOLIS%2C%20Kokapet%2C%20Hyderabad%2C%20Telangana%20500075&t=m&z=16&output=embed&iwloc=near"
             title="MSN ONE, Plot No 1, NEOPOLIS, Kokapet, Hyderabad, Telangana 500075"
             loading="lazy"
             referrerpolicy="origin"
           ></iframe>
+          <div class="map-route-meta" data-location-summary>
+            Showing route from <strong>MSN ONE, Neopolis</strong> to <strong>ORR (Exit no 1A: Mallampet)</strong> at an approximate distance of <strong>4 Minutes</strong>.
+          </div>
         </div>
       </div>
     </section>
