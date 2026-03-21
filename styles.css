@@ -658,12 +658,32 @@ input {
 .enquiry-label {
   margin: 0;
   max-width: 14ch;
-  color: #2d1a1c;
   font-family: "Cormorant Garamond", serif;
   font-size: clamp(2.4rem, 4.8vw, 4.4rem);
   line-height: 0.92;
   font-weight: 700;
   letter-spacing: 0.01em;
+}
+
+.enquiry-label span {
+  display: block;
+  width: fit-content;
+  text-shadow: 0 10px 24px rgba(84, 43, 12, 0.12);
+}
+
+.enquiry-label-black {
+  color: #120f0b;
+}
+
+.enquiry-label-gradient {
+  background: linear-gradient(180deg, #120f0b 0%, #7a1730 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.enquiry-label-wine {
+  color: #7a1730;
 }
 
 .enquiry-text {
@@ -709,6 +729,9 @@ input {
 }
 
 .enquiry-stat {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   min-height: 126px;
   padding: 18px 18px 16px;
   border: 1px solid rgba(176, 141, 87, 0.24);
@@ -719,6 +742,10 @@ input {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.28),
     0 16px 36px rgba(72, 45, 22, 0.08);
+  transition:
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.42s ease,
+    border-color 0.32s ease;
 }
 
 .enquiry-stat strong {
@@ -739,6 +766,43 @@ input {
   letter-spacing: 0.16em;
   line-height: 1.6;
   text-transform: uppercase;
+}
+
+.enquiry-stat::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from -90deg,
+    rgba(176, 141, 87, 0.92) 0deg,
+    rgba(176, 141, 87, 0.92) 318deg,
+    rgba(239, 217, 171, 1) 338deg,
+    rgba(176, 141, 87, 0.92) 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transform: rotate(0deg);
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(239, 217, 171, 0.28));
+}
+
+.enquiry-stat:hover {
+  transform: translateY(-8px);
+  border-color: rgba(239, 217, 171, 0.72);
+  box-shadow:
+    0 26px 54px rgba(72, 45, 22, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+}
+
+.enquiry-stat:hover::after {
+  opacity: 1;
+  animation: enquiry-gold-loop 1.25s linear forwards;
 }
 
 .enquiry-points,
@@ -765,6 +829,8 @@ input {
 }
 
 .lead-card-featured {
+  isolation: isolate;
+  overflow: hidden;
   width: 100%;
   max-width: 480px;
   padding: 36px 34px 32px;
@@ -783,11 +849,11 @@ input {
 }
 
 .lead-card-featured:hover {
-  transform: translateY(-4px);
-  border-color: rgba(207, 161, 141, 0.22);
+  transform: translateY(-5px);
+  border-color: rgba(239, 217, 171, 0.72);
   box-shadow:
     0 28px 72px rgba(0, 0, 0, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .lead-card::before {
@@ -1000,6 +1066,22 @@ input {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes enquiry-gold-loop {
+  from {
+    opacity: 0.35;
+    transform: rotate(0deg);
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: rotate(360deg);
   }
 }
 
@@ -1228,7 +1310,13 @@ input {
 
 .amenities-grid {
   gap: 48px;
-  align-items: start;
+  align-items: stretch;
+}
+
+.amenities-media {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .brochure-grid {
@@ -1917,7 +2005,8 @@ input {
   background-position: center;
   background-size: 100% 100%, 100% 100%, cover;
   background-repeat: no-repeat;
-  transition: background-size 0.45s ease;
+  transform-origin: left center;
+  transition: transform 0.45s ease;
 }
 
 #amenities .amenity-card:nth-of-type(1)::before {
@@ -1950,10 +2039,10 @@ input {
 }
 
 #amenities .amenity-card:hover::before {
-  background-size: 100% 100%, 100% 100%, 150%;
+  transform: scale(1.12);
 }
 
-#amenities .amenity-card summary {
+#amenities .amenity-card-head {
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr);
   align-items: center;
@@ -2002,9 +2091,12 @@ input {
   text-transform: uppercase;
 }
 
+#amenities .amenities-cta,
 #amenities .accordion-stack .button {
+  width: 100%;
   min-height: 52px;
-  margin-top: 10px;
+  margin-top: auto;
+  padding-inline: 28px;
   border-radius: 999px;
   background: linear-gradient(180deg, #c39a75, #b08d57);
   border-color: #b08d57;
@@ -2012,6 +2104,11 @@ input {
   transition: transform 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
 }
 
+#amenities .amenities-cta {
+  align-self: stretch;
+}
+
+#amenities .amenities-cta:hover,
 #amenities .accordion-stack .button:hover {
   transform: translateY(-2px);
   filter: brightness(1.03);
@@ -2908,13 +3005,13 @@ body.modal-open {
 
   #amenities .amenity-card {
     min-height: 0;
-    padding: 132px 18px 20px;
+    padding: 188px 18px 20px;
   }
 
   #amenities .amenity-card::before {
     inset: 0 0 auto 0;
     width: auto;
-    height: 108px;
+    height: 164px;
     border-right: 0;
     border-bottom: 1px solid rgba(176, 141, 87, 0.2);
   }

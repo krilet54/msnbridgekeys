@@ -44,7 +44,11 @@
     <section class="enquiry-section">
       <div class="container enquiry-grid">
         <div class="enquiry-copy">
-          <h1 class="enquiry-label">One by MSN Realty @ Neopolis</h1>
+          <h1 class="enquiry-label">
+            <span class="enquiry-label-black">One by MSN</span>
+            <span class="enquiry-label-gradient">Realty @</span>
+            <span class="enquiry-label-wine">Neopolis</span>
+          </h1>
           <p class="enquiry-text">A landmark collection of expansive 4 BHK homes with private lobby arrival, elevated lake-facing views, and a quieter, more exclusive standard of living.</p>
           <div class="enquiry-price">
             <span class="enquiry-price-label">Price starts</span>
@@ -231,10 +235,11 @@
               referrerpolicy="strict-origin-when-cross-origin"
             ></iframe>
           </div>
+          <button class="button amenities-cta" type="button" data-open-modal>Explore Amenities</button>
         </div>
         <div class="accordion-stack amenities-stack">
-          <details open class="amenity-card">
-            <summary><span class="amenity-icon" aria-hidden="true">⌂</span><span class="amenity-title">Yacht Shaped Clubhouse</span></summary>
+          <div class="amenity-card">
+            <div class="amenity-card-head"><span class="amenity-icon" aria-hidden="true">C</span><span class="amenity-title">Yacht Shaped Clubhouse</span></div>
             <div class="amenity-pills">
               <span>Banquet with Kitchen</span>
               <span>Pilates Studio</span>
@@ -242,9 +247,9 @@
               <span>Queen's Lounge</span>
               <span>And More</span>
             </div>
-          </details>
-          <details open class="amenity-card">
-            <summary><span class="amenity-icon" aria-hidden="true">◇</span><span class="amenity-title">Sky Park Amenities</span></summary>
+          </div>
+          <div class="amenity-card">
+            <div class="amenity-card-head"><span class="amenity-icon" aria-hidden="true">S</span><span class="amenity-title">Sky Park Amenities</span></div>
             <div class="amenity-pills">
               <span>Sky Infinity Pool</span>
               <span>Sky Party Lounge</span>
@@ -252,9 +257,9 @@
               <span>Sky Cinema</span>
               <span>And More</span>
             </div>
-          </details>
-          <details open class="amenity-card">
-            <summary><span class="amenity-icon" aria-hidden="true">▣</span><span class="amenity-title">Podium Level Amenities</span></summary>
+          </div>
+          <div class="amenity-card">
+            <div class="amenity-card-head"><span class="amenity-icon" aria-hidden="true">P</span><span class="amenity-title">Podium Level Amenities</span></div>
             <div class="amenity-pills">
               <span>Amphitheater</span>
               <span>Swimming Pool</span>
@@ -262,8 +267,7 @@
               <span>Golf Simulator</span>
               <span>And More</span>
             </div>
-          </details>
-          <button class="button" type="button" data-open-modal>Explore Amenities</button>
+          </div>
         </div>
       </div>
     </section>
@@ -571,3 +575,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
