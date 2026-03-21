@@ -321,7 +321,7 @@ input {
 
 .hero-copy h1,
 .section-heading h2 {
-  font-family: "Bodoni Moda", serif;
+  font-family: "Cormorant Garamond", serif;
   line-height: 0.95;
   margin: 0;
 }
@@ -567,7 +567,7 @@ input {
   max-width: 10ch;
   font-size: 1.2rem;
   line-height: 1.02;
-  font-family: "Bodoni Moda", serif;
+  font-family: "Cormorant Garamond", serif;
   letter-spacing: 0.015em;
 }
 
@@ -659,7 +659,7 @@ input {
   margin: 0;
   max-width: 11ch;
   color: #2d1a1c;
-  font-family: "Bodoni Moda", serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: clamp(2.2rem, 4.5vw, 4.2rem);
   line-height: 0.94;
   font-weight: 700;
@@ -735,7 +735,7 @@ input {
 
 .enquiry-section .lead-card h3 {
   margin: 14px 0 10px;
-  font-family: "Bodoni Moda", serif;
+  font-family: "Cormorant Garamond", serif;
   color: rgba(248, 243, 238, 0.96);
   font-size: 2.1rem;
   font-weight: 600;
@@ -1090,7 +1090,7 @@ input {
 }
 
 #price .section-heading h2 {
-  font-family: "Bodoni Moda", serif;
+  font-family: "Cormorant Garamond", serif;
   font-weight: 700;
   letter-spacing: 0.01em;
   color: #2d1a1c;
@@ -1150,7 +1150,7 @@ input {
 }
 
 #amenities .section-heading h2 {
-  font-family: "Bodoni Moda", serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: clamp(2.2rem, 4vw, 4rem);
   letter-spacing: -0.01em;
   background: linear-gradient(180deg, #52342c, #b08d57);
@@ -1762,69 +1762,15 @@ input {
 }
 
 #amenities .video-shell::before {
-  content: "Yacht Shaped Clubhouse";
-  position: absolute;
-  top: 18px;
-  left: 18px;
-  z-index: 2;
-  min-height: 34px;
-  padding: 8px 14px;
-  border: 1px solid rgba(176, 141, 87, 0.24);
-  border-radius: 999px;
-  background: rgba(15, 15, 15, 0.52);
-  color: #f7f1e8;
-  font-size: 0.68rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  backdrop-filter: blur(10px);
-  pointer-events: none;
+  content: none;
 }
 
 #amenities .video-shell::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    radial-gradient(circle at center, rgba(255, 255, 255, 0.06), transparent 22%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.06) 32%, rgba(0, 0, 0, 0.56));
-  pointer-events: none;
-}
-
-.amenities-play {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 2;
-  width: 82px;
-  height: 82px;
-  border: 1px solid rgba(176, 141, 87, 0.42);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0)),
-    rgba(15, 15, 15, 0.42);
-  box-shadow:
-    0 0 24px rgba(176, 141, 87, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-
-.amenities-play::before {
-  content: "";
-  position: absolute;
-  left: 33px;
-  top: 25px;
-  width: 0;
-  height: 0;
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-  border-left: 22px solid #f7f1e8;
-  filter: drop-shadow(0 0 10px rgba(176, 141, 87, 0.26));
+  content: none;
 }
 
 #amenities .video-shell iframe {
-  filter: contrast(1.06) saturate(0.95) brightness(0.72);
+  filter: none;
 }
 
 #amenities .video-shell .video-fallback {
@@ -1892,7 +1838,7 @@ input {
 }
 
 .amenity-title {
-  font-family: "Bodoni Moda", serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: 1.08rem;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -1959,7 +1905,7 @@ input {
     radial-gradient(circle at top, rgba(165, 120, 67, 0.16), transparent 30%),
     linear-gradient(180deg, rgba(18, 18, 18, 0.9), rgba(8, 8, 8, 0.96));
   color: #ead8de;
-  font-family: "Bodoni Moda", serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: clamp(1.4rem, 3vw, 2rem);
   letter-spacing: 0.04em;
 }
@@ -2114,7 +2060,7 @@ input {
 #contact .contact-intro h2 {
   margin: 0;
   color: #fff6ec;
-  font-family: "Bodoni Moda", serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: clamp(2rem, 3.2vw, 3rem);
   line-height: 0.96;
   letter-spacing: 0.01em;
@@ -2245,7 +2191,7 @@ input {
 .footer-disclaimer h3 {
   margin: 0;
   color: #fff5f7;
-  font-family: "Bodoni Moda", serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: 1.6rem;
 }
 
@@ -2431,7 +2377,7 @@ input {
 .legal-content h3 {
   margin: 12px 0 0;
   color: #fff4f7;
-  font-family: "Bodoni Moda", serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: 1.45rem;
 }
 
@@ -2814,23 +2760,6 @@ body.modal-open {
     margin-bottom: 22px;
   }
 
-  #amenities .video-shell::before {
-    top: 14px;
-    left: 14px;
-  }
-
-  .amenities-play {
-    width: 68px;
-    height: 68px;
-  }
-
-  .amenities-play::before {
-    left: 27px;
-    top: 21px;
-    border-top-width: 12px;
-    border-bottom-width: 12px;
-    border-left-width: 18px;
-  }
 
   #amenities .amenity-card {
     padding: 18px 18px 20px;
