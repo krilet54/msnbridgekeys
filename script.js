@@ -25,6 +25,63 @@ if (navToggle && siteNav) {
   });
 }
 
+const navLinks = siteNav ? [...siteNav.querySelectorAll("a")] : [];
+const navHoverBar = siteNav ? siteNav.querySelector(".nav-hover-bar") : null;
+let activeNavIndex = -1;
+
+const moveNavHoverBar = (link, index) => {
+  if (!siteNav || !navHoverBar || !link || window.innerWidth <= 820) return;
+
+  const navRect = siteNav.getBoundingClientRect();
+  const linkRect = link.getBoundingClientRect();
+  const nextOrigin = activeNavIndex === -1 || index >= activeNavIndex ? "left" : "right";
+
+  siteNav.style.setProperty("--nav-hover-left", `${linkRect.left - navRect.left}px`);
+  siteNav.style.setProperty("--nav-hover-width", `${linkRect.width}px`);
+  siteNav.style.setProperty("--nav-hover-origin", nextOrigin);
+  siteNav.style.setProperty("--nav-hover-scale-x", "1");
+  activeNavIndex = index;
+};
+
+const resetNavHoverBar = () => {
+  if (!siteNav || !navHoverBar || window.innerWidth <= 820) return;
+  siteNav.style.setProperty("--nav-hover-scale-x", "0");
+  activeNavIndex = -1;
+};
+
+if (siteNav && navLinks.length && navHoverBar) {
+  navLinks.forEach((link, index) => {
+    link.addEventListener("mouseenter", () => {
+      navLinks.forEach((item) => item.classList.remove("is-hovered"));
+      link.classList.add("is-hovered");
+      moveNavHoverBar(link, index);
+    });
+
+    link.addEventListener("focus", () => {
+      navLinks.forEach((item) => item.classList.remove("is-hovered"));
+      link.classList.add("is-hovered");
+      moveNavHoverBar(link, index);
+    });
+
+    link.addEventListener("mouseleave", () => {
+      link.classList.remove("is-hovered");
+    });
+
+    link.addEventListener("blur", () => {
+      link.classList.remove("is-hovered");
+    });
+  });
+
+  siteNav.addEventListener("mouseleave", resetNavHoverBar);
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth <= 820) {
+      resetNavHoverBar();
+      navLinks.forEach((link) => link.classList.remove("is-hovered"));
+    }
+  });
+}
+
 const showToast = () => {
   if (!toast) return;
   toast.hidden = false;
@@ -157,8 +214,12 @@ if (heroSlides.length) {
   startHeroRotation();
 }
 
-const formatCounter = (value) => {
-  return Number.isInteger(value) ? value.toLocaleString() : value.toFixed(1);
+const formatCounter = (value, target) => {
+  if (Number.isInteger(target)) {
+    return Math.round(value).toLocaleString();
+  }
+
+  return value.toFixed(1);
 };
 
 const animateCounter = (element) => {
@@ -168,14 +229,16 @@ const animateCounter = (element) => {
 
   const frame = (now) => {
     const progress = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
+    const eased = progress < 0.5
+      ? 4 * progress * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
     const current = target * eased;
-    element.textContent = formatCounter(current);
+    element.textContent = formatCounter(current, target);
 
     if (progress < 1) {
       window.requestAnimationFrame(frame);
     } else {
-      element.textContent = Number.isInteger(target) ? target.toLocaleString() : target.toFixed(1);
+      element.textContent = formatCounter(target, target);
     }
   };
 
