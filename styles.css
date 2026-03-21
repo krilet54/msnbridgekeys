@@ -1196,9 +1196,14 @@ input {
 }
 
 .modal-view-form {
-  max-width: 480px;
+  max-width: 620px;
   width: 100%;
   margin: 0 auto;
+}
+
+.modal-panel:has(.modal-view-form:not([hidden])) {
+  width: min(680px, calc(100vw - 24px));
+  padding: 28px 24px 24px;
 }
 
 .modal-view-legal {
