@@ -11,7 +11,10 @@ const locationMap = document.querySelector("[data-location-map]");
 const locationSummary = document.querySelector("[data-location-summary]");
 const locationTriggers = document.querySelectorAll("[data-location-trigger]");
 const locationResetButton = document.querySelector("[data-location-reset]");
+const mediaTransitionCards = document.querySelectorAll("[data-media-transition-card]");
 const projectLocation = "MSN ONE, Plot No 1, NEOPOLIS, Kokapet, Hyderabad, Telangana 500075";
+const homeSectionVideoDurationMs = 3000;
+const homeSectionVideoPlaybackRate = 2;
 
 if (navToggle && siteNav) {
   navToggle.addEventListener("click", () => {
@@ -194,7 +197,9 @@ const formatCounter = (value, target) => {
 
 const animateCounter = (element) => {
   const target = Number(element.dataset.counter || "0");
-  const duration = 1600;
+  // Original counter animation length before the home section video was added: 1600ms.
+  // Keep this synced to the video runtime while the video is present.
+  const duration = homeSectionVideoDurationMs;
   const start = performance.now();
 
   const frame = (now) => {
@@ -224,6 +229,26 @@ const counterObserver = new IntersectionObserver((entries, observer) => {
 }, { threshold: 0.4 });
 
 counters.forEach((counter) => counterObserver.observe(counter));
+
+mediaTransitionCards.forEach((card) => {
+  const video = card.querySelector("[data-media-transition-video]");
+  if (!video) return;
+
+  video.playbackRate = homeSectionVideoPlaybackRate;
+
+  video.addEventListener("loadedmetadata", () => {
+    const playbackWindowSeconds = homeSectionVideoDurationMs / 1000;
+    const targetStartTime = Math.max(video.duration - playbackWindowSeconds, 0);
+
+    if (video.duration > playbackWindowSeconds) {
+      video.currentTime = targetStartTime;
+    }
+  }, { once: true });
+
+  video.addEventListener("ended", () => {
+    card.classList.add("is-video-complete");
+  }, { once: true });
+});
 
 if (locationMap && locationTriggers.length) {
   const buildProjectOnlyMapUrl = () => {
@@ -291,7 +316,5 @@ if (locationMap && locationTriggers.length) {
     locationResetButton.addEventListener("click", showProjectOnlyLocation);
   }
 
-  updateLocationMap(
-    document.querySelector("[data-location-trigger].is-active") || locationTriggers[0]
-  );
+  showProjectOnlyLocation();
 }
