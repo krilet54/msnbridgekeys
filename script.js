@@ -218,7 +218,9 @@ const showToast = () => {
   }, 2600);
 };
 
-const setModalView = (viewName) => {
+const defaultModalTitle = "Schedule Site Visit";
+
+const setModalView = (viewName, titleText = defaultModalTitle) => {
   if (!modalViews.length) return;
 
   modalViews.forEach((view) => {
@@ -226,7 +228,7 @@ const setModalView = (viewName) => {
   });
 
   if (modalTitle && viewName === "lead") {
-    modalTitle.textContent = "Schedule Site Visit";
+    modalTitle.textContent = titleText;
   }
 };
 
@@ -235,9 +237,9 @@ const clearLegalHash = () => {
   history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
 };
 
-const openModal = (viewName = "lead", updateHash = false) => {
+const openModal = (viewName = "lead", updateHash = false, titleText = defaultModalTitle) => {
   if (!modal) return;
-  setModalView(viewName);
+  setModalView(viewName, titleText);
   modal.hidden = false;
   document.body.classList.add("modal-open");
 
@@ -258,7 +260,7 @@ const closeModal = () => {
 };
 
 document.querySelectorAll("[data-open-modal]").forEach((button) => {
-  button.addEventListener("click", () => openModal("lead"));
+  button.addEventListener("click", () => openModal("lead", false, button.dataset.modalTitle || defaultModalTitle));
 });
 
 document.querySelectorAll("[data-close-modal]").forEach((button) => {
