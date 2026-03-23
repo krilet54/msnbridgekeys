@@ -15,12 +15,16 @@ const locationResetButton = document.querySelector("[data-location-reset]");
 const mediaTransitionCards = document.querySelectorAll("[data-media-transition-card]");
 const heroBanner = document.querySelector(".hero-banner");
 const mobileRevealTargets = document.querySelectorAll(".enquiry-stat, .stat-card, #amenities .amenity-card");
+const formSubmitEndpoint = "https://formsubmit.co/ajax/kirpesh54@gmail.com";
 const projectLocation = "MSN ONE, Plot No 1, NEOPOLIS, Kokapet, Hyderabad, Telangana 500075";
 const homeSectionVideoDurationMs = 3000;
 const homeSectionVideoPlaybackRate = 2;
+const defaultModalTitle = "Schedule Site Visit";
+const toastDurationMs = 3200;
 let mobileCenterPopTicking = false;
 let mobileCenterPopRafId = 0;
 let mobileCenterPopActiveUntil = 0;
+let activeModalTriggerLabel = defaultModalTitle;
 
 if ("scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
@@ -209,16 +213,70 @@ if (siteNav && navLinks.length && navHoverBar) {
   });
 }
 
-const showToast = () => {
+const showToast = (message = "Thanks! Your details have been sent.", state = "success") => {
   if (!toast) return;
+  toast.textContent = message;
+  toast.dataset.state = state;
   toast.hidden = false;
   window.clearTimeout(showToast.timeoutId);
   showToast.timeoutId = window.setTimeout(() => {
     toast.hidden = true;
-  }, 2600);
+  }, toastDurationMs);
 };
 
-const defaultModalTitle = "Schedule Site Visit";
+const getButtonLabel = (button) => {
+  const textLabel = button.textContent.replace(/\s+/g, " ").trim();
+  return textLabel || button.getAttribute("aria-label") || defaultModalTitle;
+};
+
+const formatSubmissionTime = () => new Date().toLocaleString("en-IN", {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
+
+const getFormHeading = (form) => {
+  if (modal && modal.contains(form) && modalTitle) {
+    return modalTitle.textContent.trim();
+  }
+
+  const heading = form.parentElement?.querySelector("h2, h3");
+  return heading ? heading.textContent.trim() : form.dataset.formName || "Website Enquiry Form";
+};
+
+const buildSubmissionPayload = (form) => {
+  const formData = new FormData(form);
+  const formName = form.dataset.formName || "Website Enquiry Form";
+  const pageUrl = window.location.href;
+  const emailValue = `${formData.get("email") || ""}`.trim();
+  const payload = new URLSearchParams();
+
+  payload.set("name", `${formData.get("name") || ""}`.trim());
+  payload.set("phone", `${formData.get("phone") || ""}`.trim());
+  payload.set("email", emailValue);
+  payload.set("_subject", `New One by MSN Realty enquiry - ${formName}`);
+  payload.set("_template", "table");
+  payload.set("_replyto", emailValue);
+  payload.set("_url", pageUrl);
+  payload.set("Form Name", formName);
+  payload.set("Form Heading", getFormHeading(form));
+  payload.set("CTA Source", modal && modal.contains(form) ? activeModalTriggerLabel : formName);
+  payload.set("Page URL", pageUrl);
+  payload.set("Submitted At", formatSubmissionTime());
+
+  return payload;
+};
+
+const setFormSubmittingState = (form, isSubmitting) => {
+  const submitButton = form.querySelector('button[type="submit"]');
+  if (!submitButton) return;
+
+  if (!submitButton.dataset.defaultLabel) {
+    submitButton.dataset.defaultLabel = submitButton.textContent.trim();
+  }
+
+  submitButton.disabled = isSubmitting;
+  submitButton.textContent = isSubmitting ? "Sending..." : submitButton.dataset.defaultLabel;
+};
 
 const setModalView = (viewName, titleText = defaultModalTitle) => {
   if (!modalViews.length) return;
@@ -260,7 +318,10 @@ const closeModal = () => {
 };
 
 document.querySelectorAll("[data-open-modal]").forEach((button) => {
-  button.addEventListener("click", () => openModal("lead", false, button.dataset.modalTitle || defaultModalTitle));
+  button.addEventListener("click", () => {
+    activeModalTriggerLabel = getButtonLabel(button);
+    openModal("lead", false, button.dataset.modalTitle || defaultModalTitle);
+  });
 });
 
 document.querySelectorAll("[data-close-modal]").forEach((button) => {
@@ -283,11 +344,36 @@ window.addEventListener("hashchange", syncModalWithHash);
 syncModalWithHash();
 
 document.querySelectorAll("[data-demo-form]").forEach((form) => {
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    form.reset();
-    closeModal();
-    showToast();
+
+    try {
+      setFormSubmittingState(form, true);
+
+      const response = await fetch(formSubmitEndpoint, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        },
+        body: buildSubmissionPayload(form).toString(),
+      });
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok || (result && result.success === false)) {
+        throw new Error("Form submission failed");
+      }
+
+      form.reset();
+      if (modal && modal.contains(form)) {
+        closeModal();
+      }
+      showToast("Thanks! Your details have been sent.", "success");
+    } catch (error) {
+      showToast("Submission failed. Please try again in a moment.", "error");
+    } finally {
+      setFormSubmittingState(form, false);
+    }
   });
 });
 

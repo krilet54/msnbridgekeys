@@ -2973,6 +2973,11 @@ input {
   box-shadow: var(--shadow);
 }
 
+.toast[data-state="error"] {
+  background: rgba(79, 18, 18, 0.94);
+  border-color: rgba(255, 167, 167, 0.38);
+}
+
 [hidden] {
   display: none !important;
 }
