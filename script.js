@@ -6,6 +6,7 @@ const toast = document.querySelector("[data-toast]");
 const counters = document.querySelectorAll(".counter");
 const youtubeIframes = document.querySelectorAll("iframe[data-youtube-id]");
 const modalViews = document.querySelectorAll("[data-modal-view]");
+const homeSection = document.getElementById("home");
 const legalHashes = new Set(["privacy-policy", "terms-conditions"]);
 const locationMap = document.querySelector("[data-location-map]");
 const locationSummary = document.querySelector("[data-location-summary]");
@@ -196,6 +197,9 @@ const formatCounter = (value, target) => {
 };
 
 const animateCounter = (element) => {
+  if (element.dataset.counterAnimated === "true") return;
+  element.dataset.counterAnimated = "true";
+
   const target = Number(element.dataset.counter || "0");
   // Original counter animation length before the home section video was added: 1600ms.
   // Keep this synced to the video runtime while the video is present.
@@ -220,21 +224,51 @@ const animateCounter = (element) => {
   window.requestAnimationFrame(frame);
 };
 
-const counterObserver = new IntersectionObserver((entries, observer) => {
-  entries.forEach((entry) => {
-    if (!entry.isIntersecting) return;
-    animateCounter(entry.target);
-    observer.unobserve(entry.target);
-  });
-}, { threshold: 0.4 });
+const startHomeSectionExperience = () => {
+  counters.forEach((counter) => animateCounter(counter));
 
-counters.forEach((counter) => counterObserver.observe(counter));
+  mediaTransitionCards.forEach((card) => {
+    const video = card.querySelector("[data-media-transition-video]");
+    if (!video || video.dataset.hasStarted === "true") return;
+
+    video.dataset.hasStarted = "true";
+    const playbackWindowSeconds = homeSectionVideoDurationMs / 1000;
+    const targetStartTime = Math.max(video.duration - playbackWindowSeconds, 0);
+
+    if (Number.isFinite(video.duration) && video.duration > playbackWindowSeconds) {
+      video.currentTime = targetStartTime;
+    }
+
+    const playPromise = video.play();
+
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(() => {
+        video.controls = true;
+      });
+    }
+  });
+};
+
+if (homeSection) {
+  const homeSectionObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      startHomeSectionExperience();
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.35 });
+
+  homeSectionObserver.observe(homeSection);
+} else {
+  startHomeSectionExperience();
+}
 
 mediaTransitionCards.forEach((card) => {
   const video = card.querySelector("[data-media-transition-video]");
   if (!video) return;
 
   video.playbackRate = homeSectionVideoPlaybackRate;
+  video.pause();
 
   video.addEventListener("loadedmetadata", () => {
     const playbackWindowSeconds = homeSectionVideoDurationMs / 1000;

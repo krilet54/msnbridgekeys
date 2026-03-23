@@ -197,6 +197,8 @@ input {
   height: 100svh;
   object-fit: cover;
   object-position: center;
+  pointer-events: none;
+  background: #000;
 }
 
 .hero-slideshow,
