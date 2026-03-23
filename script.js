@@ -13,9 +13,14 @@ const locationSummary = document.querySelector("[data-location-summary]");
 const locationTriggers = document.querySelectorAll("[data-location-trigger]");
 const locationResetButton = document.querySelector("[data-location-reset]");
 const mediaTransitionCards = document.querySelectorAll("[data-media-transition-card]");
+const heroBanner = document.querySelector(".hero-banner");
+const mobileRevealTargets = document.querySelectorAll(".enquiry-stat, .stat-card, #amenities .amenity-card");
 const projectLocation = "MSN ONE, Plot No 1, NEOPOLIS, Kokapet, Hyderabad, Telangana 500075";
 const homeSectionVideoDurationMs = 3000;
 const homeSectionVideoPlaybackRate = 2;
+let mobileCenterPopTicking = false;
+let mobileCenterPopRafId = 0;
+let mobileCenterPopActiveUntil = 0;
 
 if ("scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
@@ -24,6 +29,113 @@ if ("scrollRestoration" in window.history) {
 window.addEventListener("load", () => {
   window.scrollTo(0, 0);
 });
+
+const syncHeroBannerSource = () => {
+  if (!heroBanner) return;
+
+  const mobileSrc = heroBanner.dataset.mobileSrc;
+  const desktopSrc = heroBanner.dataset.desktopSrc;
+
+  if (!mobileSrc || !desktopSrc) return;
+
+  const nextSrc = window.matchMedia("(max-width: 767px)").matches ? mobileSrc : desktopSrc;
+  const currentSrc = heroBanner.getAttribute("src");
+
+  if (currentSrc === nextSrc) return;
+
+  heroBanner.pause();
+  heroBanner.setAttribute("src", nextSrc);
+  heroBanner.load();
+
+  const playPromise = heroBanner.play();
+  if (playPromise && typeof playPromise.catch === "function") {
+    playPromise.catch(() => {});
+  }
+};
+
+syncHeroBannerSource();
+
+const heroBannerMediaQuery = window.matchMedia("(max-width: 767px)");
+if (typeof heroBannerMediaQuery.addEventListener === "function") {
+  heroBannerMediaQuery.addEventListener("change", syncHeroBannerSource);
+} else if (typeof heroBannerMediaQuery.addListener === "function") {
+  heroBannerMediaQuery.addListener(syncHeroBannerSource);
+}
+
+const updateMobileCenteredCard = () => {
+  if (!mobileRevealTargets.length) return;
+
+  const isMobile = window.matchMedia("(max-width: 767px)").matches;
+
+  if (!isMobile) {
+    document.body.classList.remove("mobile-scroll-reveal-ready");
+    mobileRevealTargets.forEach((element) => {
+      element.classList.remove("is-centered");
+    });
+    return;
+  }
+
+  document.body.classList.add("mobile-scroll-reveal-ready");
+  const viewportCenter = window.innerHeight * 0.5;
+  let nearestElement = null;
+  let nearestDistance = Number.POSITIVE_INFINITY;
+
+  mobileRevealTargets.forEach((element) => {
+    const rect = element.getBoundingClientRect();
+    const elementCenter = rect.top + rect.height / 2;
+    const distance = Math.abs(elementCenter - viewportCenter);
+
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearestElement = element;
+    }
+  });
+
+  mobileRevealTargets.forEach((element) => {
+    element.classList.toggle("is-centered", element === nearestElement);
+  });
+};
+
+const requestMobileCenteredCardUpdate = () => {
+  if (mobileCenterPopTicking) return;
+  mobileCenterPopTicking = true;
+
+  window.requestAnimationFrame(() => {
+    mobileCenterPopTicking = false;
+    updateMobileCenteredCard();
+  });
+};
+
+const startMobileCenterPopTracking = () => {
+  mobileCenterPopActiveUntil = performance.now() + 420;
+
+  if (mobileCenterPopRafId) return;
+
+  const tick = () => {
+    requestMobileCenteredCardUpdate();
+
+    if (performance.now() < mobileCenterPopActiveUntil) {
+      mobileCenterPopRafId = window.requestAnimationFrame(tick);
+      return;
+    }
+
+    mobileCenterPopRafId = 0;
+  };
+
+  mobileCenterPopRafId = window.requestAnimationFrame(tick);
+};
+
+updateMobileCenteredCard();
+window.addEventListener("scroll", startMobileCenterPopTracking, { passive: true });
+window.addEventListener("touchmove", startMobileCenterPopTracking, { passive: true });
+window.addEventListener("wheel", startMobileCenterPopTracking, { passive: true });
+window.addEventListener("resize", requestMobileCenteredCardUpdate);
+
+if (typeof heroBannerMediaQuery.addEventListener === "function") {
+  heroBannerMediaQuery.addEventListener("change", updateMobileCenteredCard);
+} else if (typeof heroBannerMediaQuery.addListener === "function") {
+  heroBannerMediaQuery.addListener(updateMobileCenteredCard);
+}
 
 if (navToggle && siteNav) {
   navToggle.addEventListener("click", () => {
