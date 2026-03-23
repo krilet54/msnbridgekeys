@@ -2229,31 +2229,144 @@ input {
 }
 
 .partners-grid figure {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: grid;
   place-items: center;
-  min-height: 150px;
+  min-height: 170px;
   margin: 0;
-  padding: 20px;
+  padding: 24px;
   border-radius: 22px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(249, 245, 238, 0.95));
   box-shadow: 0 20px 50px rgba(43, 30, 8, 0.08);
-  transition: transform 0.32s ease, box-shadow 0.32s ease;
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.42s ease, border-color 0.42s ease;
+  animation: partner-card-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.partners-grid figure::before {
+  content: "";
+  position: absolute;
+  inset: -30% 55% -30% -20%;
+  background: linear-gradient(115deg, transparent 20%, rgba(255, 255, 255, 0.6) 50%, transparent 80%);
+  opacity: 0;
+  transform: translateX(-30%) skewX(-18deg);
+  transition: transform 0.7s ease, opacity 0.4s ease;
+  pointer-events: none;
 }
 
 .partners-grid figure:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 18px 36px rgba(43, 30, 8, 0.14);
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 24px 44px rgba(43, 30, 8, 0.16);
 }
 
 .partners-grid img {
-  max-width: 82%;
-  max-height: 72px;
+  width: min(100%, 180px);
+  max-width: 92%;
+  max-height: 98px;
   object-fit: contain;
-  filter: grayscale(0.15) saturate(0.9);
+  filter: grayscale(0.1) saturate(0.95);
+  transform: translateY(0) scale(1);
+  transform-origin: center;
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), filter 0.42s ease;
+  animation: partner-logo-float 4.8s ease-in-out infinite;
+}
+
+.partners-grid figure:hover::before,
+.partners-grid figure:focus-within::before {
+  opacity: 1;
+  transform: translateX(120%) skewX(-18deg);
+}
+
+.partners-grid figure:hover img,
+.partners-grid figure:focus-within img {
+  transform: translateY(-4px) scale(1.08);
+  filter: grayscale(0) saturate(1.08);
+}
+
+.partners-grid figure:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.partners-grid figure:nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+.partners-grid figure:nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+.partners-grid figure:nth-child(5) {
+  animation-delay: 0.32s;
+}
+
+.partners-grid figure:nth-child(6) {
+  animation-delay: 0.4s;
+}
+
+@keyframes partner-card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes partner-logo-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 .downloads-grid .button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   width: 100%;
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.32s ease,
+    border-color 0.32s ease,
+    color 0.32s ease;
+}
+
+.downloads-grid .button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(255, 221, 159, 0) 0%, rgba(255, 221, 159, 0.24) 34%, rgba(255, 243, 214, 0.78) 50%, rgba(255, 221, 159, 0.24) 66%, rgba(255, 221, 159, 0) 100%),
+    linear-gradient(180deg, rgba(8, 8, 8, 0.98), rgba(24, 18, 8, 0.98));
+  background-size: 220% 100%, 100% 100%;
+  background-position: -140% 0, 0 0;
+  opacity: 0;
+  transition:
+    background-position 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.28s ease;
+}
+
+.downloads-grid .button:hover,
+.downloads-grid .button:focus-visible {
+  color: #f2d9a6;
+  border-color: rgba(208, 173, 117, 0.9);
+  transform: translateY(-3px);
+  box-shadow: 0 22px 42px rgba(0, 0, 0, 0.24);
+}
+
+.downloads-grid .button:hover::before,
+.downloads-grid .button:focus-visible::before {
+  opacity: 1;
+  background-position: 140% 0, 0 0;
 }
 
 .contact-shell {
@@ -2881,13 +2994,18 @@ body.modal-open {
     display: none;
     flex-direction: column;
     align-items: stretch;
-    gap: 0;
-    min-width: 220px;
-    padding: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 22px;
-    background: rgba(10, 10, 10, 0.94);
-    box-shadow: var(--shadow);
+    gap: 6px;
+    min-width: 236px;
+    padding: 14px;
+    border: 1px solid rgba(208, 173, 117, 0.42);
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at top right, rgba(122, 23, 48, 0.32), transparent 38%),
+      linear-gradient(180deg, rgba(13, 9, 10, 0.98), rgba(35, 7, 20, 0.96));
+    box-shadow:
+      0 22px 52px rgba(0, 0, 0, 0.34),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(14px);
   }
 
   .site-nav.is-open {
@@ -2895,15 +3013,34 @@ body.modal-open {
   }
 
   .site-nav a {
-    padding: 12px 10px;
-    background-image: none;
+    padding: 12px 14px;
+    border: 1px solid rgba(208, 173, 117, 0.18);
+    border-radius: 16px;
+    color: #efd9ab;
+    background:
+      linear-gradient(90deg, rgba(208, 173, 117, 0) 0%, rgba(208, 173, 117, 0.12) 50%, rgba(208, 173, 117, 0) 100%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
+    background-size: 220% 100%, 100% 100%;
+    background-position: 100% 50%, 0 0;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    letter-spacing: 0.16em;
+    transition:
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      color 0.28s ease,
+      border-color 0.28s ease,
+      background-position 0.42s ease,
+      background-color 0.28s ease;
   }
 
   .site-nav a:hover,
   .site-nav a:focus-visible,
   .site-nav a.is-hovered {
-    transform: translateX(6px) scale(1.02);
-    color: var(--accent-strong);
+    transform: translateX(6px);
+    color: #fff4d5;
+    border-color: rgba(239, 217, 171, 0.62);
+    background-position: 0% 50%, 0 0;
+    background-color: rgba(208, 173, 117, 0.08);
   }
 
   .nav-hover-bar {
@@ -3162,6 +3299,20 @@ body.modal-open {
   .site-footer-grid {
     grid-template-columns: 1fr;
     gap: 28px;
+  }
+
+  .partners-grid {
+    gap: 14px;
+  }
+
+  .partners-grid figure {
+    min-height: 156px;
+    padding: 22px 18px;
+  }
+
+  .partners-grid img {
+    width: min(100%, 190px);
+    max-height: 88px;
   }
 
   .modal-panel {
