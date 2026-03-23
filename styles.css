@@ -1855,6 +1855,8 @@ input {
 }
 
 .floor-copy-card .button {
+  position: relative;
+  overflow: hidden;
   align-self: end;
   justify-self: stretch;
   width: calc(100% + 28px);
@@ -1864,6 +1866,46 @@ input {
   font-size: 0.8rem;
   white-space: nowrap;
   border-radius: 0;
+  isolation: isolate;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    filter 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.floor-copy-card .button::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -38%;
+  width: 34%;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.08) 30%,
+    rgba(255, 255, 255, 0.34) 50%,
+    rgba(255, 255, 255, 0.08) 70%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-22deg);
+  animation: floor-plan-button-swipe 3.2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.floor-copy-card .button:hover,
+.floor-copy-card .button:focus-visible {
+  transform: translateY(-3px);
+  filter: brightness(1.06);
+  border-color: rgba(244, 221, 174, 0.92);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(255, 242, 215, 0.1) inset;
+}
+
+.floor-copy-card .button:hover::before,
+.floor-copy-card .button:focus-visible::before {
+  animation-duration: 1.15s;
 }
 
 #floor .section-heading,
@@ -1992,6 +2034,28 @@ input {
   }
 }
 
+@keyframes floor-plan-button-swipe {
+  0%,
+  18% {
+    transform: translateX(0) skewX(-22deg);
+    opacity: 0;
+  }
+
+  28% {
+    opacity: 1;
+  }
+
+  52% {
+    transform: translateX(420%) skewX(-22deg);
+    opacity: 0.95;
+  }
+
+  100% {
+    transform: translateX(420%) skewX(-22deg);
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   #floor .section-heading,
   #floor > .container > .section-intro,
@@ -2004,6 +2068,12 @@ input {
   #floor .media-card::after,
   .floor-grid .media-card img,
   .floor-side .media-card img {
+    transition: none;
+  }
+
+  .floor-copy-card .button,
+  .floor-copy-card .button::before {
+    animation: none;
     transition: none;
   }
 }
