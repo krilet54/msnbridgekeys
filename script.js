@@ -20,6 +20,7 @@ const projectLocation = "MSN ONE, Plot No 1, NEOPOLIS, Kokapet, Hyderabad, Telan
 const homeSectionVideoDurationMs = 3000;
 const homeSectionVideoPlaybackRate = 2;
 const defaultModalTitle = "Schedule Site Visit";
+const thankYouPagePath = "thank-you.html";
 const toastDurationMs = 3200;
 let mobileCenterPopTicking = false;
 let mobileCenterPopRafId = 0;
@@ -234,6 +235,8 @@ const formatSubmissionTime = () => new Date().toLocaleString("en-IN", {
   timeStyle: "short",
 });
 
+const getThankYouPageUrl = () => new URL(thankYouPagePath, window.location.href).toString();
+
 const getFormHeading = (form) => {
   if (modal && modal.contains(form) && modalTitle) {
     return modalTitle.textContent.trim();
@@ -368,7 +371,7 @@ document.querySelectorAll("[data-demo-form]").forEach((form) => {
       if (modal && modal.contains(form)) {
         closeModal();
       }
-      showToast("Thanks! Your details have been sent.", "success");
+      window.location.assign(getThankYouPageUrl());
     } catch (error) {
       showToast("Submission failed. Please try again in a moment.", "error");
     } finally {
